@@ -13,20 +13,8 @@
         {{ online ? 'online' : 'offline' }}
       </div>
       <br />
-      <!-- <form name="index-vue" data-netlify="true">
-        <p>
-          <label>Your Name: <input type="text" name="name"></label>
-        </p>
-        <p>
-          <label>Your Email: <input type="email" name="email"></label>
-        </p>
-        <p>
-          <label>Message: <textarea name="message"></textarea></label>
-        </p>
-        <p>
-          <button type="submit">Send</button>
-        </p>
-      </form> -->
+
+      <button class="btn btn-primary" @click="checkOs">Check OS</button>
     </div>
   </section>
 </template>
@@ -53,6 +41,34 @@
     methods: {
       _toggleNetworkStatus ({ type }) {
         this.online = type === 'online'
+      },
+      checkOs() {
+        let nav = window.navigator;
+        let ua = nav.userAgent;
+
+        function isiOsSafari (a) {
+            return ("standalone" in nav) // There's a thing called standalone in nav
+             && !nav.standalone // It is not running in standalone mode
+             && ua.indexOf(a)!=-1 // iPhone is in the UA string (could be Opera)
+             && ua.indexOf('Mac OS')!=-1 // There's Mac in the UA string (not Opera)
+             && ua.indexOf('Safari')!=-1
+             /* if all the above are true this probably means this is
+             the Safari browser,
+             not a webview in an app,
+             not a page in standalone mode */
+        }
+
+        // Check if Mobile Safari on iPhone
+        if(isiOsSafari('iPhone')){
+            document.write('Probably Safari on an iPhone: ' + ua);
+        }
+        // Check if Mobile Safari on iPod
+        else if(isiOsSafari('iPad')){
+            document.write('Probably Safari on an iPad: ' + ua);
+        }
+        else{
+            document.write('Probably something else: ' + ua)
+        }
       }
     },
     destroyed () {
